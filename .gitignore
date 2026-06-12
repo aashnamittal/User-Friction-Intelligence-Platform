@@ -17,13 +17,9 @@ build/
 
 # Local/Development configurations (credentials/secrets)
 .env
-.env.development
 .env.local
 
 # SQLite / MLflow local databases and runs
-mlflow.db
-mlruns/
-*.db
 *.sqlite
 
 # macOS files
