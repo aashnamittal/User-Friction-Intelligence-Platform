@@ -272,9 +272,15 @@ st.sidebar.image("https://img.icons8.com/nolan/96/lightning-bolt.png", width=65)
 st.sidebar.markdown("### **UFIP ORCHESTRATION**")
 st.sidebar.markdown("---")
 
+
+# Stage change callback to safely modify widget session state before rendering
+def set_stage(target_stage):
+    st.session_state.sidebar_stage_radio = target_stage
+
+
 # Navigation representing the story funnel
-if "stage" not in st.session_state:
-    st.session_state.stage = "📡 Ingestion & Telemetry Feed"
+if "sidebar_stage_radio" not in st.session_state:
+    st.session_state.sidebar_stage_radio = "📡 Ingestion & Telemetry Feed"
 
 stage_options = [
     "📡 Ingestion & Telemetry Feed",
@@ -283,24 +289,17 @@ stage_options = [
     "🎛️ Engine Control Room",
 ]
 
-if st.session_state.stage not in stage_options:
-    st.session_state.stage = "📡 Ingestion & Telemetry Feed"
-
-active_index = stage_options.index(st.session_state.stage)
+# Ensure the state has a valid selection
+if st.session_state.sidebar_stage_radio not in stage_options:
+    st.session_state.sidebar_stage_radio = "📡 Ingestion & Telemetry Feed"
 
 st.sidebar.markdown("##### **Story-Driven Funnel**")
-selected_stage = st.sidebar.radio(
+# Bind the radio selector to st.session_state.sidebar_stage_radio
+stage = st.sidebar.radio(
     "Select Stage of Investigation:",
     options=stage_options,
-    index=active_index,
     key="sidebar_stage_radio",
 )
-
-if selected_stage != st.session_state.stage:
-    st.session_state.stage = selected_stage
-    st.rerun()
-
-stage = st.session_state.stage
 
 st.sidebar.markdown("---")
 
@@ -343,44 +342,44 @@ st.markdown(
 col_tab1, col_tab2, col_tab3, col_tab4 = st.columns(4)
 
 with col_tab1:
-    if st.button(
+    st.button(
         "📡 1. Live Telemetry Ingestion",
         type="primary" if stage == "📡 Ingestion & Telemetry Feed" else "secondary",
         use_container_width=True,
         key="btn_stage_1",
-    ):
-        st.session_state.stage = "📡 Ingestion & Telemetry Feed"
-        st.rerun()
+        on_click=set_stage,
+        args=("📡 Ingestion & Telemetry Feed",),
+    )
 
 with col_tab2:
-    if st.button(
+    st.button(
         "👤 2. Experience Empathy (User Stories)",
         type="primary" if stage == "👤 Customer Empathy Space" else "secondary",
         use_container_width=True,
         key="btn_stage_2",
-    ):
-        st.session_state.stage = "👤 Customer Empathy Space"
-        st.rerun()
+        on_click=set_stage,
+        args=("👤 Customer Empathy Space",),
+    )
 
 with col_tab3:
-    if st.button(
+    st.button(
         "📊 3. Cohort & Metrics Analytics",
         type="primary" if stage == "📊 Cohort & Metrics Analytics" else "secondary",
         use_container_width=True,
         key="btn_stage_3",
-    ):
-        st.session_state.stage = "📊 Cohort & Metrics Analytics"
-        st.rerun()
+        on_click=set_stage,
+        args=("📊 Cohort & Metrics Analytics",),
+    )
 
 with col_tab4:
-    if st.button(
+    st.button(
         "🎛️ 4. Engine Control Room",
         type="primary" if stage == "🎛️ Engine Control Room" else "secondary",
         use_container_width=True,
         key="btn_stage_4",
-    ):
-        st.session_state.stage = "🎛️ Engine Control Room"
-        st.rerun()
+        on_click=set_stage,
+        args=("🎛️ Engine Control Room",),
+    )
 
 # Load data
 features_df, scores_df, cohorts_df, recs_df = load_data()
