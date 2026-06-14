@@ -24,4 +24,4 @@ run-etl:
 	.venv/bin/python pipelines/etl_flow.py
 
 test:
-	TESTING=True .venv/bin/pytest tests/
+	PYTHONPATH=. TESTING=True .venv/bin/pytest tests/
