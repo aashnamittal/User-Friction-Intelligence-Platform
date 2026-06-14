@@ -29,35 +29,34 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# Custom Premium CSS with Glassmorphism, tailored animations, and Outfit/Inter fonts
+# Custom Premium CSS with CSS Theme Variables (supports Light & Dark Modes)
 st.markdown(
     """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
     
     /* Global Overrides */
     html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+        font-family: 'Plus Jakarta Sans', sans-serif;
     }
     
-    /* Translucent Glassmorphism Cards */
+    /* Theme-Adaptive Cards */
     .glass-card {
-        background: rgba(30, 32, 41, 0.45);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.07);
+        background: var(--secondary-background-color) !important;
+        border: 1px solid rgba(128, 128, 128, 0.15) !important;
         border-radius: 16px;
         padding: 24px;
         margin-bottom: 20px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        color: var(--text-color) !important;
     }
     
     .glass-card-header {
         font-size: 18px;
         font-weight: 700;
         margin-bottom: 15px;
-        color: #f1f5f9;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--text-color) !important;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.15) !important;
         padding-bottom: 10px;
         display: flex;
         align-items: center;
@@ -71,7 +70,7 @@ st.markdown(
         animation: gradientShift 10s ease infinite;
         padding: 30px;
         border-radius: 20px;
-        color: white;
+        color: white !important;
         margin-bottom: 25px;
         box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
         border: 1px solid rgba(255, 255, 255, 0.15);
@@ -88,41 +87,44 @@ st.markdown(
         font-weight: 800;
         margin: 0;
         letter-spacing: -0.5px;
+        color: white !important;
     }
     .header-subtitle {
         font-size: 15px;
         opacity: 0.9;
         margin-top: 6px;
         font-weight: 300;
+        color: white !important;
     }
     
     /* Secondary (Inactive) Tabs styling */
     div[data-testid="stBaseButton-secondary"] button {
-        background: rgba(30, 32, 41, 0.45) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        background: var(--secondary-background-color) !important;
+        border: 1px solid rgba(128, 128, 128, 0.2) !important;
         border-radius: 12px !important;
-        color: #94a3b8 !important;
+        color: var(--text-color) !important;
+        opacity: 0.85;
         padding: 12px 20px !important;
         font-weight: 600 !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
         transition: all 0.3s ease !important;
         height: 52px !important;
     }
     div[data-testid="stBaseButton-secondary"] button:hover {
-        border-color: rgba(168, 85, 247, 0.4) !important;
-        color: #f1f5f9 !important;
-        background: rgba(30, 32, 41, 0.6) !important;
+        border-color: var(--primary-color) !important;
+        color: var(--text-color) !important;
+        opacity: 1 !important;
     }
 
     /* Primary (Active) Tabs styling */
     div[data-testid="stBaseButton-primary"] button {
-        background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%) !important;
-        border: 1px solid rgba(168, 85, 247, 0.5) !important;
+        background: var(--primary-color) !important;
+        border: 1px solid var(--primary-color) !important;
         border-radius: 12px !important;
-        color: #e9d5ff !important;
+        color: white !important; /* Always white for high contrast on active theme color */
         padding: 12px 20px !important;
         font-weight: 700 !important;
-        box-shadow: 0 4px 20px rgba(168, 85, 247, 0.25) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
         transition: all 0.3s ease !important;
         height: 52px !important;
     }
@@ -130,13 +132,14 @@ st.markdown(
     /* Custom Timeline Speech Bubbles */
     .speech-bubble {
         position: relative;
-        background: rgba(45, 48, 62, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: var(--secondary-background-color) !important;
+        border: 1px solid rgba(128, 128, 128, 0.15) !important;
         border-radius: 14px;
         padding: 16px;
         margin-bottom: 12px;
         margin-left: 20px;
-        border-left: 4px solid #6366f1;
+        border-left: 4px solid #6366f1 !important;
+        color: var(--text-color) !important;
     }
     .speech-bubble::before {
         content: '';
@@ -147,24 +150,24 @@ st.markdown(
         height: 0;
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
-        border-right: 8px solid rgba(45, 48, 62, 0.4);
+        border-right: 8px solid var(--secondary-background-color) !important;
     }
     
     .bubble-rage {
-        border-left-color: #ef4444;
-        background: rgba(239, 68, 68, 0.08);
+        border-left-color: #ef4444 !important;
+        background: rgba(239, 68, 68, 0.07) !important;
     }
     .bubble-error {
-        border-left-color: #f59e0b;
-        background: rgba(245, 158, 11, 0.08);
+        border-left-color: #f59e0b !important;
+        background: rgba(245, 158, 11, 0.07) !important;
     }
     .bubble-abandon {
-        border-left-color: #ec4899;
-        background: rgba(236, 72, 153, 0.08);
+        border-left-color: #ec4899 !important;
+        background: rgba(236, 72, 153, 0.07) !important;
     }
     .bubble-slow {
-        border-left-color: #3b82f6;
-        background: rgba(59, 130, 246, 0.08);
+        border-left-color: #3b82f6 !important;
+        background: rgba(59, 130, 246, 0.07) !important;
     }
     
     /* Empathy Alert Box */
@@ -180,28 +183,28 @@ st.markdown(
     }
     .empathy-green {
         background: rgba(16, 185, 129, 0.1);
-        color: #34d399;
+        color: #10b981;
         border: 1px solid rgba(16, 185, 129, 0.25);
     }
     .empathy-amber {
         background: rgba(245, 158, 11, 0.1);
-        color: #fbbf24;
+        color: #d97706;
         border: 1px solid rgba(245, 158, 11, 0.25);
     }
     .empathy-red {
         background: rgba(239, 68, 68, 0.1);
-        color: #f87171;
+        color: #dc2626;
         border: 1px solid rgba(239, 68, 68, 0.25);
     }
     
     /* Email Copy block container */
     .email-container {
-        background: #0f1015;
+        background: #1e293b !important;
         border: 1px dashed rgba(168, 85, 247, 0.3);
         border-radius: 12px;
         padding: 20px;
-        font-family: 'Courier New', Courier, monospace;
-        color: #e2e8f0;
+        font-family: monospace;
+        color: #f8fafc !important;
         margin-bottom: 15px;
         font-size: 14px;
         white-space: pre-wrap;
@@ -217,8 +220,9 @@ st.markdown(
     }
     .stat-desc {
         font-size: 12px;
-        color: #94a3b8;
-        font-weight: 500;
+        color: var(--text-color) !important;
+        opacity: 0.7;
+        font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
