@@ -96,29 +96,35 @@ st.markdown(
         font-weight: 300;
     }
     
-    /* Stage Indicator / Story step timeline */
-    .funnel-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 25px;
-        gap: 10px;
+    /* Secondary (Inactive) Tabs styling */
+    div[data-testid="stBaseButton-secondary"] button {
+        background: rgba(30, 32, 41, 0.45) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 12px !important;
+        color: #94a3b8 !important;
+        padding: 12px 20px !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+        transition: all 0.3s ease !important;
+        height: 52px !important;
     }
-    .funnel-step {
-        flex: 1;
-        background: rgba(30, 32, 41, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        padding: 12px;
-        border-radius: 12px;
-        text-align: center;
-        font-size: 12px;
-        color: #94a3b8;
-        font-weight: 600;
+    div[data-testid="stBaseButton-secondary"] button:hover {
+        border-color: rgba(168, 85, 247, 0.4) !important;
+        color: #f1f5f9 !important;
+        background: rgba(30, 32, 41, 0.6) !important;
     }
-    .funnel-step-active {
-        background: rgba(168, 85, 247, 0.15);
-        border-color: rgba(168, 85, 247, 0.4);
-        color: #d8b4fe;
-        box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
+
+    /* Primary (Active) Tabs styling */
+    div[data-testid="stBaseButton-primary"] button {
+        background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%) !important;
+        border: 1px solid rgba(168, 85, 247, 0.5) !important;
+        border-radius: 12px !important;
+        color: #e9d5ff !important;
+        padding: 12px 20px !important;
+        font-weight: 700 !important;
+        box-shadow: 0 4px 20px rgba(168, 85, 247, 0.25) !important;
+        transition: all 0.3s ease !important;
+        height: 52px !important;
     }
     
     /* Custom Timeline Speech Bubbles */
@@ -267,16 +273,34 @@ st.sidebar.markdown("### **UFIP ORCHESTRATION**")
 st.sidebar.markdown("---")
 
 # Navigation representing the story funnel
+if "stage" not in st.session_state:
+    st.session_state.stage = "📡 Ingestion & Telemetry Feed"
+
+stage_options = [
+    "📡 Ingestion & Telemetry Feed",
+    "👤 Customer Empathy Space",
+    "📊 Cohort & Metrics Analytics",
+    "🎛️ Engine Control Room",
+]
+
+if st.session_state.stage not in stage_options:
+    st.session_state.stage = "📡 Ingestion & Telemetry Feed"
+
+active_index = stage_options.index(st.session_state.stage)
+
 st.sidebar.markdown("##### **Story-Driven Funnel**")
-stage = st.sidebar.radio(
+selected_stage = st.sidebar.radio(
     "Select Stage of Investigation:",
-    [
-        "📡 Ingestion & Telemetry Feed",
-        "👤 Customer Empathy Space",
-        "📊 Cohort & Metrics Analytics",
-        "🎛️ Engine Control Room",
-    ],
+    options=stage_options,
+    index=active_index,
+    key="sidebar_stage_radio",
 )
+
+if selected_stage != st.session_state.stage:
+    st.session_state.stage = selected_stage
+    st.rerun()
+
+stage = st.session_state.stage
 
 st.sidebar.markdown("---")
 
@@ -315,16 +339,48 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Render Visual Funnel Progress Bar
-funnel_html = f"""
-<div class="funnel-container">
-    <div class="funnel-step {'funnel-step-active' if stage == "📡 Ingestion & Telemetry Feed" else ''}">📡 1. Live Telemetry Ingestion</div>
-    <div class="funnel-step {'funnel-step-active' if stage == "👤 Customer Empathy Space" else ''}">👤 2. Experience Empathy (User Stories)</div>
-    <div class="funnel-step {'funnel-step-active' if stage == "📊 Cohort & Metrics Analytics" else ''}">📊 3. Cohort & Metrics Analytics</div>
-    <div class="funnel-step {'funnel-step-active' if stage == "🎛️ Engine Control Room" else ''}">🎛️ 4. Engine Control Room</div>
-</div>
-"""
-st.markdown(funnel_html, unsafe_allow_html=True)
+# Render Visual Funnel Progress Bar as Clickable Tabs
+col_tab1, col_tab2, col_tab3, col_tab4 = st.columns(4)
+
+with col_tab1:
+    if st.button(
+        "📡 1. Live Telemetry Ingestion",
+        type="primary" if stage == "📡 Ingestion & Telemetry Feed" else "secondary",
+        use_container_width=True,
+        key="btn_stage_1",
+    ):
+        st.session_state.stage = "📡 Ingestion & Telemetry Feed"
+        st.rerun()
+
+with col_tab2:
+    if st.button(
+        "👤 2. Experience Empathy (User Stories)",
+        type="primary" if stage == "👤 Customer Empathy Space" else "secondary",
+        use_container_width=True,
+        key="btn_stage_2",
+    ):
+        st.session_state.stage = "👤 Customer Empathy Space"
+        st.rerun()
+
+with col_tab3:
+    if st.button(
+        "📊 3. Cohort & Metrics Analytics",
+        type="primary" if stage == "📊 Cohort & Metrics Analytics" else "secondary",
+        use_container_width=True,
+        key="btn_stage_3",
+    ):
+        st.session_state.stage = "📊 Cohort & Metrics Analytics"
+        st.rerun()
+
+with col_tab4:
+    if st.button(
+        "🎛️ 4. Engine Control Room",
+        type="primary" if stage == "🎛️ Engine Control Room" else "secondary",
+        use_container_width=True,
+        key="btn_stage_4",
+    ):
+        st.session_state.stage = "🎛️ Engine Control Room"
+        st.rerun()
 
 # Load data
 features_df, scores_df, cohorts_df, recs_df = load_data()
