@@ -1,0 +1,23 @@
+artifact_path: /Users/aashnamittal/Desktop/ufip/mlruns/1/models/m-3a0335aea33348569ab5a4f652d25556/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.14.5
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.9.0
+    skops_trusted_types: null
+mlflow_version: 3.13.0
+model_id: m-3a0335aea33348569ab5a4f652d25556
+model_size_bytes: 776
+model_uuid: m-3a0335aea33348569ab5a4f652d25556
+prompts: null
+run_id: 8f2f77469779458b9e98f6cf3fa9ec1e
+utc_time_created: '2026-06-14 07:10:57.504640'
